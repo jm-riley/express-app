@@ -8,6 +8,9 @@ router.get('/', function (req, res, next) {
 
 router.post('/', async (req, res) => {
   createUser();
+  const { username, email, password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
+  await User.create({ username, email, hashedPassword });
   req.session.user = user;
   req.session.save((err) => {
     return res.redirect('/');
